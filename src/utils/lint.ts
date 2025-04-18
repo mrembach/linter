@@ -36,48 +36,80 @@ function hasCornerRadius(node: BaseNode): boolean {
   return 'cornerRadius' in node;
 }
 
+// Helper to get auto-layout information
+function getAutoLayoutInfo(node: BaseNode) {
+  if ('layoutMode' in node) {
+    const layoutNode = node as FrameNode | ComponentNode | InstanceNode;
+    return {
+      isAutoLayout: layoutNode.layoutMode !== 'NONE',
+      layoutMode: layoutNode.layoutMode,
+      layoutAlign: layoutNode.primaryAxisAlignItems,
+      layoutWrap: layoutNode.layoutWrap ? 'WRAP' as const : 'NO_WRAP' as const
+    };
+  }
+  return {
+    isAutoLayout: false,
+    layoutMode: 'NONE' as const,
+    layoutAlign: 'NONE' as const,
+    layoutWrap: 'NO_WRAP' as const
+  };
+}
+
 function createFillIssue(node: SceneNode, fill: SolidFill): LintIssue {
+  const autoLayoutInfo = getAutoLayoutInfo(node);
   log('Creating fill issue', {
     nodeName: node.name,
     nodeType: node.type,
-    fillColor: fill.color
+    fillColor: fill.color,
+    ...autoLayoutInfo
   });
   return {
     nodeId: node.id,
     nodeName: node.name,
     type: 'fill',
-    message: 'Fill not linked to a style or variable'
+    message: 'Fill not linked to a style or variable',
+    nodeType: node.type,
+    ...autoLayoutInfo
   };
 }
 
 function createStrokeIssue(node: SceneNode, stroke: SolidStroke): LintIssue {
+  const autoLayoutInfo = getAutoLayoutInfo(node);
   log('Creating stroke issue', {
     nodeName: node.name,
     nodeType: node.type,
-    strokeColor: stroke.color
+    strokeColor: stroke.color,
+    ...autoLayoutInfo
   });
   return {
     nodeId: node.id,
     nodeName: node.name,
     type: 'stroke',
-    message: 'Stroke not linked to a style or variable'
+    message: 'Stroke not linked to a style or variable',
+    nodeType: node.type,
+    ...autoLayoutInfo
   };
 }
 
 function createTextIssue(node: TextNode): LintIssue {
+  const autoLayoutInfo = getAutoLayoutInfo(node);
   log('Creating text issue', {
     nodeName: node.name,
-    nodeType: node.type
+    nodeType: node.type,
+    ...autoLayoutInfo
   });
   return {
     nodeId: node.id,
     nodeName: node.name,
     type: 'text',
-    message: 'Text not linked to a style or variable'
+    message: 'Text not linked to a style or variable',
+    nodeType: node.type,
+    ...autoLayoutInfo
   };
 }
 
 function createRadiusIssue(node: SceneNode, radiusDetails: string): LintIssue {
+  const autoLayoutInfo = getAutoLayoutInfo(node);
   // Get detailed corner information for debugging
   let debugInfo = '';
   if ('cornerRadius' in node) {
@@ -150,35 +182,45 @@ function createRadiusIssue(node: SceneNode, radiusDetails: string): LintIssue {
     type: 'radius',
     message: 'Corner radius not linked to a variable',
     details: radiusDetails,
-    debug: debugInfo
+    debug: debugInfo,
+    nodeType: node.type,
+    ...autoLayoutInfo
   };
 }
 
 function createGapIssue(node: SceneNode): LintIssue {
+  const autoLayoutInfo = getAutoLayoutInfo(node);
   log('Creating gap issue', {
     nodeName: node.name,
-    nodeType: node.type
+    nodeType: node.type,
+    ...autoLayoutInfo
   });
   return {
     nodeId: node.id,
     nodeName: node.name,
     type: 'gap',
-    message: 'Item spacing not linked to a variable'
+    message: 'Item spacing not linked to a variable',
+    nodeType: node.type,
+    ...autoLayoutInfo
   };
 }
 
 function createPaddingIssue(node: SceneNode, paddingDetails: string): LintIssue {
+  const autoLayoutInfo = getAutoLayoutInfo(node);
   log('Creating padding issue', {
     nodeName: node.name,
     nodeType: node.type,
-    paddingDetails
+    paddingDetails,
+    ...autoLayoutInfo
   });
   return {
     nodeId: node.id,
     nodeName: node.name,
     type: 'padding',
     message: 'Padding not linked to a variable',
-    details: paddingDetails
+    details: paddingDetails,
+    nodeType: node.type,
+    ...autoLayoutInfo
   };
 }
 
@@ -215,6 +257,7 @@ function createWrongLibraryIssue(
   sourceLibraryId: string,
   sourceLibraryName: string
 ): LintIssue {
+  const autoLayoutInfo = getAutoLayoutInfo(node);
   log('Creating wrong library issue', {
     nodeName: node.name,
     nodeType: node.type,
@@ -251,11 +294,12 @@ function createWrongLibraryIssue(
   return {
     nodeId: node.id,
     nodeName: node.name,
-    type: itemType, // Use the actual item type instead of 'wrongLibrary'
+    type: itemType,
     message: `Wrong library/${typeText}`,
-    details: `Using style from "${sourceLibraryName}" library`,
     sourceLibraryId,
-    sourceLibraryName
+    sourceLibraryName,
+    nodeType: node.type,
+    ...autoLayoutInfo
   };
 }
 

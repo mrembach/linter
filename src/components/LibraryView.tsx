@@ -11,7 +11,7 @@ import {
   Button,
   LoadingIndicator,
   MiddleAlign,
-  IconWarning32,
+  IconWarning16,
   Muted
 } from '@create-figma-plugin/ui';
 import { emit, on } from '@create-figma-plugin/utilities';

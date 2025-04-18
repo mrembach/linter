@@ -8,13 +8,13 @@
     "watch": "build-figma-plugin --typecheck --watch"
   },
   "dependencies": {
-    "@create-figma-plugin/ui": "^2.1.0",
-    "@create-figma-plugin/utilities": "^2.1.0",
+    "@create-figma-plugin/ui": "^4.0.0",
+    "@create-figma-plugin/utilities": "^4.0.0",
     "preact": "^10.19.3"
   },
   "devDependencies": {
-    "@create-figma-plugin/build": "^2.1.0",
-    "@create-figma-plugin/tsconfig": "^2.1.0",
+    "@create-figma-plugin/build": "^4.0.0",
+    "@create-figma-plugin/tsconfig": "^4.0.0",
     "@figma/plugin-typings": "^1.109.0",
     "@types/node": "^20.11.0",
     "typescript": "^5.3.3"
@@ -24,6 +24,8 @@
     "name": "Figma Linter",
     "main": "src/main.ts",
     "ui": "src/ui.tsx",
-    "permissions": ["teamlibrary"]
+    "permissions": [
+      "teamlibrary"
+    ]
   }
 }

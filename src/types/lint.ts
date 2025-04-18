@@ -11,6 +11,11 @@ export interface LintIssue {
   sourceLibraryId?: string; // ID of the library where the style/variable comes from
   sourceLibraryName?: string; // Name of the library where the style/variable comes from
   debug?: string; // Temporary field for debugging purposes
+  nodeType?: string; // The Figma node type (FRAME, COMPONENT, etc.)
+  isAutoLayout?: boolean; // Whether the frame uses auto-layout
+  layoutMode?: 'NONE' | 'HORIZONTAL' | 'VERTICAL'; // Auto-layout direction
+  layoutAlign?: 'MIN' | 'MAX' | 'CENTER' | 'SPACE_BETWEEN' | 'NONE'; // Auto-layout alignment
+  layoutWrap?: 'NO_WRAP' | 'WRAP'; // Whether auto-layout wraps
 }
 
 export interface GroupedIssues {

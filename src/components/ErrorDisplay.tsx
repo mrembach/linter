@@ -6,17 +6,29 @@ import {
   Stack, 
   VerticalSpace, 
   Bold, 
-  IconMissingFonts32, 
-  IconCornerRadius32, 
-  IconSpacingVertical32, 
-  IconPaddingHorizontal32,
+  IconMissingFont24, 
+  IconCorners24, 
+  IconSpacingVerticalSmall24, 
+  IconSpacingHorizontalSmall24,
   Layer,
-  IconStrokeWeight32,
-  IconEyedropper32
+  IconStrokeWeight24,
+  IconEyedropper24,
+  IconFrame16,
+  IconComponent16,
+  IconInstance16,
+  IconText16,
+  IconGroup16,
+  IconPen16,
+  IconAutoLayoutVerticalLeft16,
+  IconAutoLayoutVerticalRight16,
+  IconAutoLayoutHorizontalTop16,
+  IconAutoLayoutHorizontalCenter16,
+  IconAutoLayoutHorizontalBottom16,
+  IconAutoLayoutVerticalCenter16
 } from '@create-figma-plugin/ui';
 import { emit } from '@create-figma-plugin/utilities';
 import { LintIssue, LintIssueType, GroupedIssues } from '../types/lint';
-import { useState } from 'preact/hooks';
+import { useState, useEffect } from 'preact/hooks';
 
 // Numbered circle component for issue count
 function NumberedCircle({ count }: { count: number }) {
@@ -89,17 +101,17 @@ function getIssueIcon(type: LintIssueType, issue?: LintIssue, issueCount?: numbe
       const typeText = messageParts[1].toLowerCase();
       
       if (typeText.includes('text')) {
-        return wrapIcon(<IconMissingFonts32 />);
+        return wrapIcon(<IconMissingFont24 />);
       } else if (typeText.includes('stroke')) {
-        return wrapIcon(<IconStrokeWeight32 />);
+        return wrapIcon(<IconStrokeWeight24 />);
       } else if (typeText.includes('radius')) {
-        return wrapIcon(<IconCornerRadius32 />);
+        return wrapIcon(<IconCorners24 />);
       } else if (typeText.includes('gap')) {
-        return wrapIcon(<IconSpacingVertical32 />);
+        return wrapIcon(<IconSpacingVerticalSmall24 />);
       } else if (typeText.includes('padding')) {
-        return wrapIcon(<IconPaddingHorizontal32 />);
+        return wrapIcon(<IconSpacingHorizontalSmall24 />);
       } else if (typeText.includes('fill') || typeText.includes('color')) {
-        return wrapIcon(<IconEyedropper32 />);
+        return wrapIcon(<IconEyedropper24 />);
       }
     }
   }
@@ -107,19 +119,19 @@ function getIssueIcon(type: LintIssueType, issue?: LintIssue, issueCount?: numbe
   // Standard issue types
   switch(type) {
     case 'fill':
-      return wrapIcon(<IconEyedropper32 />);
+      return wrapIcon(<IconEyedropper24 />);
     case 'stroke':
-      return wrapIcon(<IconStrokeWeight32 />);
+      return wrapIcon(<IconStrokeWeight24 />);
     case 'text':
-      return wrapIcon(<IconMissingFonts32 />);
+      return wrapIcon(<IconMissingFont24 />);
     case 'radius':
-      return wrapIcon(<IconCornerRadius32 />);
+      return wrapIcon(<IconCorners24 />);
     case 'gap':
-      return wrapIcon(<IconSpacingVertical32 />);
+      return wrapIcon(<IconSpacingVerticalSmall24 />);
     case 'padding':
-      return wrapIcon(<IconPaddingHorizontal32 />);
+      return wrapIcon(<IconSpacingHorizontalSmall24 />);
     default:
-      return wrapIcon(<IconEyedropper32 />);
+      return wrapIcon(<IconEyedropper24 />);
   }
 }
 
@@ -207,34 +219,124 @@ const filterOptions = [
   { label: 'Padding', value: 'padding' }
 ];
 
+// Helper function to determine auto-layout icon
+function getAutoLayoutIcon(issue: LintIssue): h.JSX.Element {
+  // Safe access to node properties
+  const layoutMode = issue.layoutMode || 'NONE';
+  const layoutAlign = issue.layoutAlign || 'NONE';
+
+  // Handle horizontal layouts
+  if (layoutMode === 'HORIZONTAL') {
+    switch (layoutAlign) {
+      case 'MIN':
+        return <IconAutoLayoutHorizontalTop16 />;
+      case 'CENTER':
+        return <IconAutoLayoutHorizontalCenter16 />;
+      case 'MAX':
+        return <IconAutoLayoutHorizontalBottom16 />;
+      default:
+        return <IconAutoLayoutHorizontalCenter16 />;
+    }
+  }
+
+  // Handle vertical layouts
+  if (layoutMode === 'VERTICAL') {
+    switch (layoutAlign) {
+      case 'MIN':
+        return <IconAutoLayoutVerticalLeft16 />;
+      case 'CENTER':
+        return <IconAutoLayoutVerticalCenter16 />;
+      case 'MAX':
+        return <IconAutoLayoutVerticalRight16 />;
+      default:
+        // For other cases, use center alignment icon as default
+        return <IconAutoLayoutVerticalCenter16 />;
+    }
+  }
+
+  // Fallback to horizontal center for any other cases
+  return <IconAutoLayoutHorizontalCenter16 />;
+}
+
+function getLayerTypeIcon(issue: LintIssue) {
+  // Safe access to potentially undefined properties
+  const nodeType = issue?.nodeType || 'FRAME';
+  const isAutoLayout = issue?.isAutoLayout || false;
+
+  // Return appropriate icon based on node type
+  switch (nodeType) {
+    case 'COMPONENT':
+      return <IconComponent16 />;
+    case 'INSTANCE':
+      return <IconInstance16 />;
+    case 'TEXT':
+      return <IconText16 />;
+    case 'GROUP':
+      return <IconGroup16 />;
+    case 'VECTOR':
+    case 'RECTANGLE':
+    case 'ELLIPSE':
+    case 'POLYGON':
+    case 'STAR':
+    case 'LINE':
+      return <IconPen16 />;
+    case 'FRAME':
+      // For frames, check if it has auto-layout
+      return isAutoLayout ? getAutoLayoutIcon(issue) : <IconFrame16 />;
+    default:
+      return <IconFrame16 />;
+  }
+}
+
+// Layer type priority for sorting
+const layerTypePriority: Record<string, number> = {
+  'FRAME': 1,
+  'COMPONENT': 2,
+  'INSTANCE': 3,
+  'TEXT': 4,
+  'GROUP': 5,
+  'VECTOR': 6,
+  'RECTANGLE': 6,
+  'ELLIPSE': 6,
+  'POLYGON': 6,
+  'STAR': 6,
+  'LINE': 6,
+  'default': 999
+};
+
+// Helper function to get priority for a layer type
+function getLayerTypePriority(nodeType: string): number {
+  return layerTypePriority[nodeType] || layerTypePriority.default;
+}
+
+// Sort function for grouped issues
+function sortByLayerType(a: [string, LintIssue[]], b: [string, LintIssue[]]): number {
+  const aIssue = a[1][0];
+  const bIssue = b[1][0];
+  const aPriority = getLayerTypePriority(aIssue.nodeType || 'default');
+  const bPriority = getLayerTypePriority(bIssue.nodeType || 'default');
+  return aPriority - bPriority;
+}
+
 export function ErrorDisplay({ issues }: { issues: LintIssue[] }) {
   const [selectedFilter, setSelectedFilter] = useState<FilterOption>('all');
   const [selectedLayerId, setSelectedLayerId] = useState<string | null>(null);
   
   // Debug logging for incoming issues
-  const initialRadiusIssues = issues.filter(issue => issue.type === 'radius');
-  console.log('[ErrorDisplay] Initial radius issues:', {
+  console.log('[ErrorDisplay] Issues Summary:', {
     totalCount: issues.length,
-    radiusCount: initialRadiusIssues.length,
-    radiusIssues: initialRadiusIssues
+    byType: issues.reduce((acc, issue) => {
+      acc[issue.type] = (acc[issue.type] || 0) + 1;
+      return acc;
+    }, {} as Record<string, number>)
   });
   
   // Deduplicate ALL issues first (for proper counts)
   const allDeduplicatedIssues = issues.reduce((acc, issue) => {
-    // For radius issues, include more details in the key to prevent over-deduplication
     const key = issue.type === 'radius' 
       ? `${issue.nodeId}-${issue.type}-${issue.details || ''}-${issue.message || ''}`
       : `${issue.nodeId}-${issue.type}${issue.details ? `-${issue.details}` : ''}`;
       
-    if (issue.type === 'radius') {
-      console.log('[ErrorDisplay] Processing radius issue for deduplication:', {
-        nodeId: issue.nodeId,
-        key,
-        alreadyExists: !!acc[key],
-        details: issue.details
-      });
-    }
-    
     if (!acc[key]) {
       acc[key] = issue;
     }
@@ -244,23 +346,22 @@ export function ErrorDisplay({ issues }: { issues: LintIssue[] }) {
   // Convert to array
   const allUniqueIssues = Object.values(allDeduplicatedIssues);
   
-  // Debug logging after deduplication
-  const radiusIssuesAfterDedup = allUniqueIssues.filter(issue => issue.type === 'radius');
-  console.log('[ErrorDisplay] After deduplication:', {
-    totalDeduplicatedCount: allUniqueIssues.length,
-    radiusCount: radiusIssuesAfterDedup.length,
-    radiusIssues: radiusIssuesAfterDedup,
-    deduplicationKeys: Object.keys(allDeduplicatedIssues).filter(key => key.includes('radius'))
-  });
-  
   // Count issues by type AFTER deduplication
   const counts = allUniqueIssues.reduce((acc, issue) => {
     acc[issue.type] = (acc[issue.type] || 0) + 1;
     return acc;
   }, {} as Record<LintIssueType, number>);
   
-  // Debug logging of counts by type
-  console.log('[ErrorDisplay] Counts by type:', counts);
+  // Log only when filter changes
+  useEffect(() => {
+    console.log('[ErrorDisplay] Filter changed:', {
+      filter: selectedFilter,
+      totalIssues: allUniqueIssues.length,
+      visibleIssues: selectedFilter === 'all' 
+        ? allUniqueIssues.length 
+        : counts[selectedFilter as LintIssueType] || 0
+    });
+  }, [selectedFilter, allUniqueIssues.length]);
   
   // Filter issues based on selected filter
   const filteredIssues = selectedFilter === 'all' 
@@ -331,9 +432,8 @@ export function ErrorDisplay({ issues }: { issues: LintIssue[] }) {
           <FilterPill
             key={option.value}
             label={option.value === 'all' 
-              ? `All issues (${allUniqueIssues.length})` 
-              : `${option.label} (${counts[option.value as LintIssueType] || 0})`
-            }
+              ? `All issues (${allUniqueIssues.length})`
+              : `${option.label} (${counts[option.value as LintIssueType] || 0})`}
             isSelected={selectedFilter === option.value}
             onClick={() => setSelectedFilter(option.value as FilterOption)}
           />
@@ -341,31 +441,40 @@ export function ErrorDisplay({ issues }: { issues: LintIssue[] }) {
       </div>
       
       <div style={{ marginTop: '0px' }}>
-        {Object.entries(groupedIssues).map(([layerKey, layerIssues]) => {
-          const [layerId, layerName] = layerKey.split('-');
-          const isSelected = selectedLayerId === layerId;
-          
-          return (
-            <div key={layerKey} style={{ 
-              marginBottom: '-4px',
-              paddingLeft: 'calc(var(--space-medium) / 2)',
-              paddingRight: 'calc(var(--space-medium) / 2)'
-            }}>
-              <Layer
-                icon={getIssueIcon(layerIssues[0].type, layerIssues[0], selectedFilter === 'all' ? layerIssues.length : undefined)}
-                value={isSelected}
-                onChange={(event) => handleLayerToggle(layerId, event.currentTarget.checked)}
-                description={formatIssueDescriptions(layerIssues)}
-                style={{ 
-                  paddingLeft: 0, 
-                  paddingRight: 0
-                }}
-              >
-                {layerName.length > 32 ? `${layerName.slice(0, 29)}...` : layerName}
-              </Layer>
-            </div>
-          );
-        })}
+        {Object.entries(groupedIssues)
+          .sort(sortByLayerType)
+          .map(([layerKey, layerIssues]) => {
+            const [layerId, layerName] = layerKey.split('-');
+            const isSelected = selectedLayerId === layerId;
+            
+            return (
+              <div key={layerKey} style={{
+                paddingLeft: 'var(--space-medium)',
+                paddingRight: 'var(--space-medium)',
+                position: 'relative'
+              }}>
+                <Layer
+                  icon={getLayerTypeIcon(layerIssues[0])}
+                  value={isSelected}
+                  onChange={(event) => handleLayerToggle(layerId, event.currentTarget.checked)}
+                  description={formatIssueDescriptions(layerIssues)}
+                >
+                  {layerName.length > 32 ? `${layerName.slice(0, 29)}...` : layerName}
+                </Layer>
+                {selectedFilter === 'all' && layerIssues.length > 0 && (
+                  <div style={{
+                    position: 'absolute',
+                    right: 'calc(var(--space-medium) + var(--space-extra-small))',
+                    top: '50%',
+                    transform: 'translateY(-50%)',
+                    zIndex: 1
+                  }}>
+                    <NumberedCircle count={layerIssues.length} />
+                  </div>
+                )}
+              </div>
+            );
+          })}
       </div>
       
       {filteredIssues.length === 0 && (
@@ -380,4 +489,4 @@ export function ErrorDisplay({ issues }: { issues: LintIssue[] }) {
       )}
     </Stack>
   );
-} 
+}

@@ -8,8 +8,8 @@ import {
   Button,
   Link,
   MiddleAlign,
-  IconRotate32,
-  IconAdjust32,
+  IconRotate24,
+  IconAdjust24,
   LoadingIndicator
 } from '@create-figma-plugin/ui';
 import { ErrorDisplay } from './ErrorDisplay';
@@ -36,8 +36,7 @@ export function App() {
   console.log('[UI] App rendering:', { 
     issueCount: issues.length, 
     isLoading,
-    selectionState,
-    isSettingsUpdating
+    selectionCount: selectionState.count
   });
 
   useEffect(() => {
@@ -45,8 +44,7 @@ export function App() {
 
     function handleIssues(newIssues: LintIssue[]) {
       console.log('[UI] Handling issues update:', { 
-        count: newIssues.length,
-        issues: newIssues
+        count: newIssues.length
       });
       
       if (isMounted) {
@@ -58,7 +56,10 @@ export function App() {
 
     function handleSelectionChange(state: SelectionState) {
       if (isMounted) {
-        console.log('[UI] Selection changed:', state);
+        console.log('[UI] Selection changed:', {
+          count: state.count,
+          isValid: state.isValid
+        });
         setSelectionState(state);
         setSelectionError(null);
       }
@@ -66,7 +67,7 @@ export function App() {
 
     function handleSelectionError(error: string | { title: string; message: string }) {
       if (isMounted) {
-        console.log('[UI] Selection error:', error);
+        console.log('[UI] Selection error:', typeof error === 'string' ? error : error.title);
         setSelectionError(typeof error === 'string' ? { title: 'Error', message: error } : error);
         setSelectionState({ isValid: false, count: 0 });
       }
@@ -242,12 +243,17 @@ export function App() {
               fullWidth
               onClick={handleRunLint}
               disabled={selectionState.count === 0 || selectionState.count > 5 || isLoading}
+              style={{
+                height: '40px',
+                minHeight: '40px'
+              }}
             >
               <div style={{ 
                 display: 'flex', 
                 justifyContent: 'space-between',
                 width: '100%',
-                alignItems: 'center'
+                alignItems: 'center',
+                padding: '0 var(--space-extra-small)'
               }}>
                 <Text style={{ color: 'var(--figma-color-icon-onbrand)' }}>Run linter</Text>
                 <Text style={{ 

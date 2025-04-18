@@ -12,11 +12,11 @@ import {
   LoadingIndicator,
   MiddleAlign,
   Muted,
-  IconInfo32,
+  IconInfo16,
   Toggle,
   Button,
   Divider,
-  IconLibrary32,
+  IconLibrary24,
   Link,
   IconLockLocked16
 } from '@create-figma-plugin/ui';
