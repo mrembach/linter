@@ -15,7 +15,6 @@ import {
   IconInfo16,
   Toggle,
   Button,
-  Divider,
   IconLibrary24,
   Link,
   IconLockLocked16
@@ -41,6 +40,23 @@ const DEFAULT_EXCEPTIONS = 'Retail UI/border-banner, Retail UI/border-select-dar
 
 const Loader = () => {
   return <LoadingIndicator />;
+};
+
+// Custom styled Toggle component wrapper to scale it down
+const ScaledToggle = ({onChange, value, children}: {onChange: (event: h.JSX.TargetedEvent<HTMLInputElement>) => void, value: boolean, children: any}) => {
+  return (
+    <div style={{ 
+      transform: 'scale(0.8)',
+      transformOrigin: 'right',
+      margin: 0,
+      padding: 0,
+      display: 'flex'
+    }}>
+      <Toggle onChange={onChange} value={value}>
+        {children}
+      </Toggle>
+    </div>
+  );
 };
 
 export function SettingsView() {
@@ -399,7 +415,7 @@ export function SettingsView() {
           <VerticalSpace space="small" />
           
           {/* Layer Filtering Section */}
-          <div>
+          <div style={{ width: '100%' }}>
             <Text>
               <Bold>Layer Filtering</Bold>
             </Text>
@@ -407,18 +423,17 @@ export function SettingsView() {
             
             {/* Exclude Locked Layers Toggle */}
             <div style={{ 
-              display: 'flex', 
-              flexDirection: 'row', 
+              display: 'flex',
               alignItems: 'center',
               justifyContent: 'space-between',
-              marginBottom: 'var(--space-small)'
+              width: '100%',
+              marginBottom: '4px',
+              padding: 0
             }}>
-              <div style={{ display: 'flex', alignItems: 'center' }}>
-                <Text>Exclude locked layers</Text>
-              </div>
-              <Toggle onChange={handleExcludeLockedChange} value={excludeLockedLayers}>
+              <Text>Exclude locked layers</Text>
+              <ScaledToggle onChange={handleExcludeLockedChange} value={excludeLockedLayers}>
                 {''}
-              </Toggle>
+              </ScaledToggle>
             </div>
             
             {/* Exclude Hidden Layers Toggle */}
@@ -426,14 +441,15 @@ export function SettingsView() {
               display: 'flex', 
               flexDirection: 'row', 
               alignItems: 'center',
-              justifyContent: 'space-between'
+              justifyContent: 'space-between',
+              width: '100%'
             }}>
               <div style={{ display: 'flex', alignItems: 'center' }}>
                 <Text>Exclude hidden layers</Text>
               </div>
-              <Toggle onChange={handleExcludeHiddenChange} value={excludeHiddenLayers}>
+              <ScaledToggle onChange={handleExcludeHiddenChange} value={excludeHiddenLayers}>
                 {''}
-              </Toggle>
+              </ScaledToggle>
             </div>
           </div>
           
@@ -441,7 +457,7 @@ export function SettingsView() {
           <VerticalSpace space="extraLarge" />
           
           {/* Issue Type Checks Section */}
-          <div>
+          <div style={{ width: '100%' }}>
             <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
               <div style={{ display: 'flex', alignItems: 'center' }}>
                 <Text>
@@ -503,14 +519,15 @@ export function SettingsView() {
               flexDirection: 'row', 
               alignItems: 'center',
               justifyContent: 'space-between',
-              marginBottom: 'var(--space-small)'
+              marginBottom: '4px',
+              width: '100%'
             }}>
               <div style={{ display: 'flex', alignItems: 'center' }}>
                 <Text>Color Fill</Text>
               </div>
-              <Toggle onChange={(e) => handleIssueTypeCheckChange('fill', e)} value={checkFills}>
+              <ScaledToggle onChange={(e) => handleIssueTypeCheckChange('fill', e)} value={checkFills}>
                 {''}
-              </Toggle>
+              </ScaledToggle>
             </div>
             
             {/* Color Stroke Toggle */}
@@ -519,14 +536,15 @@ export function SettingsView() {
               flexDirection: 'row', 
               alignItems: 'center',
               justifyContent: 'space-between',
-              marginBottom: 'var(--space-small)'
+              marginBottom: '4px',
+              width: '100%'
             }}>
               <div style={{ display: 'flex', alignItems: 'center' }}>
                 <Text>Color Stroke</Text>
               </div>
-              <Toggle onChange={(e) => handleIssueTypeCheckChange('stroke', e)} value={checkStrokes}>
+              <ScaledToggle onChange={(e) => handleIssueTypeCheckChange('stroke', e)} value={checkStrokes}>
                 {''}
-              </Toggle>
+              </ScaledToggle>
             </div>
             
             {/* Text Style Toggle */}
@@ -535,14 +553,15 @@ export function SettingsView() {
               flexDirection: 'row', 
               alignItems: 'center',
               justifyContent: 'space-between',
-              marginBottom: 'var(--space-small)'
+              marginBottom: '4px',
+              width: '100%'
             }}>
               <div style={{ display: 'flex', alignItems: 'center' }}>
                 <Text>Text Style</Text>
               </div>
-              <Toggle onChange={(e) => handleIssueTypeCheckChange('text', e)} value={checkTexts}>
+              <ScaledToggle onChange={(e) => handleIssueTypeCheckChange('text', e)} value={checkTexts}>
                 {''}
-              </Toggle>
+              </ScaledToggle>
             </div>
             
             {/* Radius Toggle */}
@@ -551,14 +570,15 @@ export function SettingsView() {
               flexDirection: 'row', 
               alignItems: 'center',
               justifyContent: 'space-between',
-              marginBottom: 'var(--space-small)'
+              marginBottom: '4px',
+              width: '100%'
             }}>
               <div style={{ display: 'flex', alignItems: 'center' }}>
                 <Text>Radius</Text>
               </div>
-              <Toggle onChange={(e) => handleIssueTypeCheckChange('radius', e)} value={checkRadius}>
+              <ScaledToggle onChange={(e) => handleIssueTypeCheckChange('radius', e)} value={checkRadius}>
                 {''}
-              </Toggle>
+              </ScaledToggle>
             </div>
             
             {/* Gap Toggle */}
@@ -567,14 +587,15 @@ export function SettingsView() {
               flexDirection: 'row', 
               alignItems: 'center',
               justifyContent: 'space-between',
-              marginBottom: 'var(--space-small)'
+              marginBottom: '4px',
+              width: '100%'
             }}>
               <div style={{ display: 'flex', alignItems: 'center' }}>
                 <Text>Gap</Text>
               </div>
-              <Toggle onChange={(e) => handleIssueTypeCheckChange('gap', e)} value={checkGaps}>
+              <ScaledToggle onChange={(e) => handleIssueTypeCheckChange('gap', e)} value={checkGaps}>
                 {''}
-              </Toggle>
+              </ScaledToggle>
             </div>
             
             {/* Padding Toggle */}
@@ -583,14 +604,15 @@ export function SettingsView() {
               flexDirection: 'row', 
               alignItems: 'center',
               justifyContent: 'space-between',
-              marginBottom: 'var(--space-small)'
+              marginBottom: '4px',
+              width: '100%'
             }}>
               <div style={{ display: 'flex', alignItems: 'center' }}>
                 <Text>Padding</Text>
               </div>
-              <Toggle onChange={(e) => handleIssueTypeCheckChange('padding', e)} value={checkPadding}>
+              <ScaledToggle onChange={(e) => handleIssueTypeCheckChange('padding', e)} value={checkPadding}>
                 {''}
-              </Toggle>
+              </ScaledToggle>
             </div>
           </div>
           
@@ -665,22 +687,16 @@ export function SettingsView() {
                   value={selectedLibraryId || ''}
                   placeholder="POS Design System"
                   style={{
-                    borderColor: 'var(--figma-color-border)',
-                    boxShadow: '0 0 0 1px var(--figma-color-border)',
-                    borderRadius: 'var(--border-radius-2)',
-                    color: 'var(--figma-color-text)',
-                    backgroundColor: 'transparent',
-                    cursor: 'not-allowed',
-                    paddingRight: '32px'
+                    cursor: 'not-allowed'
                   }}
                 />
                 <div style={{
                   position: 'absolute',
-                  right: '8px',
+                  right: '16px',
                   top: '50%',
                   transform: 'translateY(-50%)',
                   pointerEvents: 'none',
-                  opacity: 0.8
+                  opacity: 0.4
                 }}>
                   <IconLockLocked16 />
                 </div>
@@ -766,18 +782,15 @@ export function SettingsView() {
               onInput={handleExceptionsChange}
               rows={4}
               style={{ 
-                width: '100%', 
-                resize: 'vertical',
+                width: '100%',
                 minHeight: '100px',
-                borderColor: 'var(--figma-color-border)',
-                boxShadow: '0 0 0 1px var(--figma-color-border)',
-                borderRadius: 'var(--border-radius-2)'
+                border: 'var(--border-width-1) solid var(--figma-color-border)',
+                backgroundColor: 'transparent'
               }}
             />
           </div>
           
           {/* Report Section */}
-          <Divider />
           <VerticalSpace space="extraLarge" />
           
           <div style={{ 
