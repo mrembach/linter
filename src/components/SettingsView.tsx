@@ -50,8 +50,7 @@ const ScaledToggle = ({onChange, value, children}: {onChange: (event: h.JSX.Targ
       transform: 'scale(0.8)', 
       transformOrigin: 'right center',
       display: 'flex',
-      justifyContent: 'flex-end',
-      marginRight: '-2px' // Negative margin to compensate for any parent padding
+      justifyContent: 'flex-end'
     }}>
       <Toggle onChange={onChange} value={value}>
         {children}
@@ -416,7 +415,7 @@ export function SettingsView() {
           <VerticalSpace space="small" />
           
           {/* Layer Filtering Section */}
-          <div>
+          <div style={{ width: '100%' }}>
             <Text>
               <Bold>Layer Filtering</Bold>
             </Text>
@@ -428,7 +427,8 @@ export function SettingsView() {
               flexDirection: 'row', 
               alignItems: 'center',
               justifyContent: 'space-between',
-              marginBottom: '4px'
+              marginBottom: '4px',
+              width: '100%'
             }}>
               <div style={{ display: 'flex', alignItems: 'center' }}>
                 <Text>Exclude locked layers</Text>
@@ -443,7 +443,8 @@ export function SettingsView() {
               display: 'flex', 
               flexDirection: 'row', 
               alignItems: 'center',
-              justifyContent: 'space-between'
+              justifyContent: 'space-between',
+              width: '100%'
             }}>
               <div style={{ display: 'flex', alignItems: 'center' }}>
                 <Text>Exclude hidden layers</Text>
@@ -458,7 +459,7 @@ export function SettingsView() {
           <VerticalSpace space="extraLarge" />
           
           {/* Issue Type Checks Section */}
-          <div>
+          <div style={{ width: '100%' }}>
             <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
               <div style={{ display: 'flex', alignItems: 'center' }}>
                 <Text>
@@ -520,7 +521,8 @@ export function SettingsView() {
               flexDirection: 'row', 
               alignItems: 'center',
               justifyContent: 'space-between',
-              marginBottom: '4px'
+              marginBottom: '4px',
+              width: '100%'
             }}>
               <div style={{ display: 'flex', alignItems: 'center' }}>
                 <Text>Color Fill</Text>
@@ -536,7 +538,8 @@ export function SettingsView() {
               flexDirection: 'row', 
               alignItems: 'center',
               justifyContent: 'space-between',
-              marginBottom: '4px'
+              marginBottom: '4px',
+              width: '100%'
             }}>
               <div style={{ display: 'flex', alignItems: 'center' }}>
                 <Text>Color Stroke</Text>
@@ -552,7 +555,8 @@ export function SettingsView() {
               flexDirection: 'row', 
               alignItems: 'center',
               justifyContent: 'space-between',
-              marginBottom: '4px'
+              marginBottom: '4px',
+              width: '100%'
             }}>
               <div style={{ display: 'flex', alignItems: 'center' }}>
                 <Text>Text Style</Text>
@@ -568,7 +572,8 @@ export function SettingsView() {
               flexDirection: 'row', 
               alignItems: 'center',
               justifyContent: 'space-between',
-              marginBottom: '4px'
+              marginBottom: '4px',
+              width: '100%'
             }}>
               <div style={{ display: 'flex', alignItems: 'center' }}>
                 <Text>Radius</Text>
@@ -584,7 +589,8 @@ export function SettingsView() {
               flexDirection: 'row', 
               alignItems: 'center',
               justifyContent: 'space-between',
-              marginBottom: '4px'
+              marginBottom: '4px',
+              width: '100%'
             }}>
               <div style={{ display: 'flex', alignItems: 'center' }}>
                 <Text>Gap</Text>
@@ -600,7 +606,8 @@ export function SettingsView() {
               flexDirection: 'row', 
               alignItems: 'center',
               justifyContent: 'space-between',
-              marginBottom: '4px'
+              marginBottom: '4px',
+              width: '100%'
             }}>
               <div style={{ display: 'flex', alignItems: 'center' }}>
                 <Text>Padding</Text>
