@@ -15,7 +15,6 @@ import {
   IconInfo16,
   Toggle,
   Button,
-  Divider,
   IconLibrary24,
   Link,
   IconLockLocked16
@@ -47,11 +46,11 @@ const Loader = () => {
 const ScaledToggle = ({onChange, value, children}: {onChange: (event: h.JSX.TargetedEvent<HTMLInputElement>) => void, value: boolean, children: any}) => {
   return (
     <div style={{ 
-      transform: 'scale(0.8)', 
-      transformOrigin: 'right center',
-      display: 'flex',
-      justifyContent: 'flex-end',
-      width: '100%'  // Take full width of parent to allow flex-end to work properly
+      transform: 'scale(0.8)',
+      transformOrigin: 'right',
+      margin: 0,
+      padding: 0,
+      display: 'flex'
     }}>
       <Toggle onChange={onChange} value={value}>
         {children}
@@ -424,16 +423,14 @@ export function SettingsView() {
             
             {/* Exclude Locked Layers Toggle */}
             <div style={{ 
-              display: 'flex', 
-              flexDirection: 'row', 
+              display: 'flex',
               alignItems: 'center',
               justifyContent: 'space-between',
+              width: '100%',
               marginBottom: '4px',
-              width: '100%'
+              padding: 0
             }}>
-              <div style={{ display: 'flex', alignItems: 'center' }}>
-                <Text>Exclude locked layers</Text>
-              </div>
+              <Text>Exclude locked layers</Text>
               <ScaledToggle onChange={handleExcludeLockedChange} value={excludeLockedLayers}>
                 {''}
               </ScaledToggle>
@@ -690,22 +687,16 @@ export function SettingsView() {
                   value={selectedLibraryId || ''}
                   placeholder="POS Design System"
                   style={{
-                    borderColor: 'var(--figma-color-border)',
-                    boxShadow: '0 0 0 1px var(--figma-color-border)',
-                    borderRadius: 'var(--border-radius-2)',
-                    color: 'var(--figma-color-text)',
-                    backgroundColor: 'transparent',
-                    cursor: 'not-allowed',
-                    paddingRight: '32px'
+                    cursor: 'not-allowed'
                   }}
                 />
                 <div style={{
                   position: 'absolute',
-                  right: '8px',
+                  right: '16px',
                   top: '50%',
                   transform: 'translateY(-50%)',
                   pointerEvents: 'none',
-                  opacity: 0.8
+                  opacity: 0.4
                 }}>
                   <IconLockLocked16 />
                 </div>
@@ -791,18 +782,15 @@ export function SettingsView() {
               onInput={handleExceptionsChange}
               rows={4}
               style={{ 
-                width: '100%', 
-                resize: 'vertical',
+                width: '100%',
                 minHeight: '100px',
-                borderColor: 'var(--figma-color-border)',
-                boxShadow: '0 0 0 1px var(--figma-color-border)',
-                borderRadius: 'var(--border-radius-2)'
+                border: 'var(--border-width-1) solid var(--figma-color-border)',
+                backgroundColor: 'transparent'
               }}
             />
           </div>
           
           {/* Report Section */}
-          <Divider />
           <VerticalSpace space="extraLarge" />
           
           <div style={{ 
