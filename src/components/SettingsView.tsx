@@ -50,7 +50,8 @@ const ScaledToggle = ({onChange, value, children}: {onChange: (event: h.JSX.Targ
       transform: 'scale(0.8)', 
       transformOrigin: 'right center',
       display: 'flex',
-      justifyContent: 'flex-end'
+      justifyContent: 'flex-end',
+      width: '100%'  // Take full width of parent to allow flex-end to work properly
     }}>
       <Toggle onChange={onChange} value={value}>
         {children}
