@@ -43,6 +43,17 @@ const Loader = () => {
   return <LoadingIndicator />;
 };
 
+// Custom styled Toggle component wrapper to scale it down
+const ScaledToggle = ({onChange, value, children}: {onChange: (event: h.JSX.TargetedEvent<HTMLInputElement>) => void, value: boolean, children: any}) => {
+  return (
+    <div style={{ transform: 'scale(0.8)' }}>
+      <Toggle onChange={onChange} value={value}>
+        {children}
+      </Toggle>
+    </div>
+  );
+};
+
 export function SettingsView() {
   const [libraries, setLibraries] = useState<Library[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -411,14 +422,14 @@ export function SettingsView() {
               flexDirection: 'row', 
               alignItems: 'center',
               justifyContent: 'space-between',
-              marginBottom: 'var(--space-small)'
+              marginBottom: '4px'
             }}>
               <div style={{ display: 'flex', alignItems: 'center' }}>
                 <Text>Exclude locked layers</Text>
               </div>
-              <Toggle onChange={handleExcludeLockedChange} value={excludeLockedLayers}>
+              <ScaledToggle onChange={handleExcludeLockedChange} value={excludeLockedLayers}>
                 {''}
-              </Toggle>
+              </ScaledToggle>
             </div>
             
             {/* Exclude Hidden Layers Toggle */}
@@ -431,9 +442,9 @@ export function SettingsView() {
               <div style={{ display: 'flex', alignItems: 'center' }}>
                 <Text>Exclude hidden layers</Text>
               </div>
-              <Toggle onChange={handleExcludeHiddenChange} value={excludeHiddenLayers}>
+              <ScaledToggle onChange={handleExcludeHiddenChange} value={excludeHiddenLayers}>
                 {''}
-              </Toggle>
+              </ScaledToggle>
             </div>
           </div>
           
@@ -503,14 +514,14 @@ export function SettingsView() {
               flexDirection: 'row', 
               alignItems: 'center',
               justifyContent: 'space-between',
-              marginBottom: 'var(--space-small)'
+              marginBottom: '4px'
             }}>
               <div style={{ display: 'flex', alignItems: 'center' }}>
                 <Text>Color Fill</Text>
               </div>
-              <Toggle onChange={(e) => handleIssueTypeCheckChange('fill', e)} value={checkFills}>
+              <ScaledToggle onChange={(e) => handleIssueTypeCheckChange('fill', e)} value={checkFills}>
                 {''}
-              </Toggle>
+              </ScaledToggle>
             </div>
             
             {/* Color Stroke Toggle */}
@@ -519,14 +530,14 @@ export function SettingsView() {
               flexDirection: 'row', 
               alignItems: 'center',
               justifyContent: 'space-between',
-              marginBottom: 'var(--space-small)'
+              marginBottom: '4px'
             }}>
               <div style={{ display: 'flex', alignItems: 'center' }}>
                 <Text>Color Stroke</Text>
               </div>
-              <Toggle onChange={(e) => handleIssueTypeCheckChange('stroke', e)} value={checkStrokes}>
+              <ScaledToggle onChange={(e) => handleIssueTypeCheckChange('stroke', e)} value={checkStrokes}>
                 {''}
-              </Toggle>
+              </ScaledToggle>
             </div>
             
             {/* Text Style Toggle */}
@@ -535,14 +546,14 @@ export function SettingsView() {
               flexDirection: 'row', 
               alignItems: 'center',
               justifyContent: 'space-between',
-              marginBottom: 'var(--space-small)'
+              marginBottom: '4px'
             }}>
               <div style={{ display: 'flex', alignItems: 'center' }}>
                 <Text>Text Style</Text>
               </div>
-              <Toggle onChange={(e) => handleIssueTypeCheckChange('text', e)} value={checkTexts}>
+              <ScaledToggle onChange={(e) => handleIssueTypeCheckChange('text', e)} value={checkTexts}>
                 {''}
-              </Toggle>
+              </ScaledToggle>
             </div>
             
             {/* Radius Toggle */}
@@ -551,14 +562,14 @@ export function SettingsView() {
               flexDirection: 'row', 
               alignItems: 'center',
               justifyContent: 'space-between',
-              marginBottom: 'var(--space-small)'
+              marginBottom: '4px'
             }}>
               <div style={{ display: 'flex', alignItems: 'center' }}>
                 <Text>Radius</Text>
               </div>
-              <Toggle onChange={(e) => handleIssueTypeCheckChange('radius', e)} value={checkRadius}>
+              <ScaledToggle onChange={(e) => handleIssueTypeCheckChange('radius', e)} value={checkRadius}>
                 {''}
-              </Toggle>
+              </ScaledToggle>
             </div>
             
             {/* Gap Toggle */}
@@ -567,14 +578,14 @@ export function SettingsView() {
               flexDirection: 'row', 
               alignItems: 'center',
               justifyContent: 'space-between',
-              marginBottom: 'var(--space-small)'
+              marginBottom: '4px'
             }}>
               <div style={{ display: 'flex', alignItems: 'center' }}>
                 <Text>Gap</Text>
               </div>
-              <Toggle onChange={(e) => handleIssueTypeCheckChange('gap', e)} value={checkGaps}>
+              <ScaledToggle onChange={(e) => handleIssueTypeCheckChange('gap', e)} value={checkGaps}>
                 {''}
-              </Toggle>
+              </ScaledToggle>
             </div>
             
             {/* Padding Toggle */}
@@ -583,14 +594,14 @@ export function SettingsView() {
               flexDirection: 'row', 
               alignItems: 'center',
               justifyContent: 'space-between',
-              marginBottom: 'var(--space-small)'
+              marginBottom: '4px'
             }}>
               <div style={{ display: 'flex', alignItems: 'center' }}>
                 <Text>Padding</Text>
               </div>
-              <Toggle onChange={(e) => handleIssueTypeCheckChange('padding', e)} value={checkPadding}>
+              <ScaledToggle onChange={(e) => handleIssueTypeCheckChange('padding', e)} value={checkPadding}>
                 {''}
-              </Toggle>
+              </ScaledToggle>
             </div>
           </div>
           
