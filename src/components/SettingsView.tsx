@@ -681,25 +681,11 @@ export function SettingsView() {
                 width: '100%'
               }}>
                 <Dropdown
-                  disabled={true}
                   onChange={handleLibraryChange}
                   options={libraryOptions}
                   value={selectedLibraryId || ''}
                   placeholder="POS Design System"
-                  style={{
-                    cursor: 'not-allowed'
-                  }}
                 />
-                <div style={{
-                  position: 'absolute',
-                  right: '16px',
-                  top: '50%',
-                  transform: 'translateY(-50%)',
-                  pointerEvents: 'none',
-                  opacity: 0.4
-                }}>
-                  <IconLockLocked16 />
-                </div>
               </div>
             </div>
             
